@@ -6,5 +6,4 @@ kind: Kustomization
 #   - password=PASSWORD
 resources:
   - web-pv-ga.yaml
-  - web-pvc-ga.yaml
   - web.yaml

@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx
-  namespace: dev
   labels:
     app: nginx
 spec:
@@ -22,6 +21,7 @@ spec:
     matchLabels:
       app: nginx
   serviceName: nginx
+  podManagementPolicy: "Parallel"
   replicas: 2
   template:
     metadata:
@@ -30,17 +30,20 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx-slim:0.8
+        image: k8s.gcr.io/nginx-slim:0.8
         ports:
         - containerPort: 80
           name: web
         volumeMounts:
-        - name: nginx-pv-claim
+        - name: nginx-pv-mount
           mountPath: /usr/share/nginx/html
   volumeClaimTemplates:
   - metadata:
       name: nginx-pv-claim
+      labels:
+        app: nginx
     spec:
+      storageClassName: manual
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
